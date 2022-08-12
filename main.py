@@ -1,7 +1,6 @@
 from flask import *
 import sqlite3, hashlib, os
 from werkzeug.utils import secure_filename
-from instamojo_wrapper import Instamojo
 import requests
 
 app = Flask(__name__)
@@ -258,29 +257,6 @@ def checkout():
         totalPrice += row[2]
     return render_template("checkout.html", products = products, totalPrice=totalPrice, loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems)
 
-@app.route("/instamojo")
-def instamojo():
-    return render_template("instamojo.html")
-
-@app.route("/removeFromCart")
-def removeFromCart():
-    if 'email' not in session:
-        return redirect(url_for('loginForm'))
-    email = session['email']
-    productId = int(request.args.get('productId'))
-    with sqlite3.connect('database.db') as conn:
-        cur = conn.cursor()
-        cur.execute("SELECT userId FROM users WHERE email = '" + email + "'")
-        userId = cur.fetchone()[0]
-        try:
-            cur.execute("DELETE FROM kart WHERE userId = " + str(userId) + " AND productId = " + str(productId))
-            conn.commit()
-            msg = "removed successfully"
-        except:
-            conn.rollback()
-            msg = "error occured"
-    conn.close()
-    return redirect(url_for('root'))
 
 @app.route("/logout")
 def logout():
@@ -340,7 +316,7 @@ def parse(data):
     i = 0
     while i < len(data):
         curr = []
-        for j in range(7):
+        for j in range(4):
             if i >= len(data):
                 break
             curr.append(data[i])

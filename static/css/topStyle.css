@@ -9,19 +9,19 @@
 }
 
 #title {
-	background-color: black;
+	background-color: SteelBlue;
 	display: inline-block;
 	width: 100%;
 }
 
 #searchBox {
-	height: 20px;
-	width: 800px;
-	margin-left: 20px;
+	height: 30px;
+	width: 500px;
+	margin-left: 150px;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	margin-right: 20px;
-	float: left;
+	margin-right: 50px;
+	float: center;
 	font-size: 1.5em;
 }
 
@@ -30,13 +30,13 @@
 	margin-top: 20px;
 	margin-bottom: 20px;
 	margin-right: 20px;
-	float: left;
+	float: center;
 }
 
 .dropbtn {
-	background-color: black;
+	background-color: Teal;
 	color: white;
-	padding: 16px;
+	padding: 20px;
 	font-size: 15px;
 	border: none;
 	cursor: pointer;
@@ -44,7 +44,7 @@
 
 .dropdown {
 	position: relative;
-	float: left;
+	float: center;
 }
 
 .dropdown-content  {
@@ -91,7 +91,7 @@
 }
 
 #cartIcon {
-	height: 30px;
-	width: 30px;
+	height: 40px;
+	width: 40px;
 }
 
