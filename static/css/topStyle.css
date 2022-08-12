@@ -34,7 +34,7 @@
 }
 
 .dropbtn {
-	background-color: Black;
+	background-color: green;
 	color: white;
 	padding: 20px;
 	font-size: 15px;
@@ -82,7 +82,7 @@
 	float: left;
 }
 #kart {
-	color: white;
+	color: red;
 	margin-top: 20px;
 	margin-bottom: 20px;
 	margin-left: 20px;
