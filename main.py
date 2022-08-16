@@ -1,4 +1,4 @@
-#flask app for ecomerse website
+#flask app for ecom
 from flask import *
 import sqlite3, hashlib, os
 from werkzeug.utils import secure_filename
