@@ -3,6 +3,15 @@ import sqlite3, hashlib, os
 from werkzeug.utils import secure_filename
 import requests
 
+import os
+from google.cloud import pubsub_v1
+
+publisher = pubsub_v1.PublisherClient()
+topic_name = 'projects/casestudyproject-358809/topics/flask-gcp-topic'.format(
+    project_id=os.getenv('GOOGLE_CLOUD_PROJECT'),
+    topic='flask-gcp-topic', 
+)
+
 app = Flask(__name__)
 app.secret_key = 'random string'
 UPLOAD_FOLDER = 'static/uploads'
@@ -21,6 +30,8 @@ def root():
         cur.execute('SELECT categoryId, name FROM categories')
         categoryData = cur.fetchall()
     itemData = parse(itemData)   
+    future = publisher.publish(topic_name, b'1 user is accessing application', datakey='application accessed')
+    future.result()
     return render_template('home.html', itemData=itemData, loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems, categoryData=categoryData)
 
 #Fetch user details if logged in
@@ -144,6 +155,8 @@ def changePassword():
             else:
                 msg = "Wrong password"
         conn.close()
+        future = publisher.publish(topic_name, b'Password is successfully changed', datakey='password changed')
+        future.result()
         return render_template("changePassword.html", msg=msg)
     else:
         return render_template("changePassword.html")
@@ -188,6 +201,8 @@ def login():
         password = request.form['password']
         if is_valid(email, password):
             session['email'] = email
+            future = publisher.publish(topic_name, b'User logged in successfully', datakey='used logged in')
+            future.result()
             return redirect(url_for('root'))
         else:
             error = 'Invalid UserId / Password'
@@ -218,6 +233,8 @@ def addToCart():
                 cur.execute("INSERT INTO kart (userId, productId) VALUES (?, ?)", (userId, productId))
                 conn.commit()
                 msg = "Added successfully"
+                future = publisher.publish(topic_name, b'Item added in cart', datakey='item added')
+                future.result()
             except:
                 conn.rollback()
                 msg = "Error occured"
@@ -253,6 +270,8 @@ def checkout():
         userId = cur.fetchone()[0]
         cur.execute("SELECT products.productId, products.name, products.price, products.image FROM products, kart WHERE products.productId = kart.productId AND kart.userId = " + str(userId))
         products = cur.fetchall()
+    future = publisher.publish(topic_name, b'Successfully placed order ', datakey='order placed')
+    future.result()
     totalPrice = 0
     for row in products:
         totalPrice += row[2]
