@@ -223,7 +223,7 @@ def q():
         search_q=request.form['q']
         search_q={"search_q":search_q}
         print("search query is ",search_q)
-        endpoint="http://0.0.0.0:8087/query"
+        endpoint="https://flask-gcp-search-2-nsayxgrsra-uc.a.run.app/query"
         #itemData,loggedIn, firstName, noOfItems,categoryData=requests.get(endpoint,params=search_q)
         data_return=requests.get(endpoint,params=search_q)
         #print(type(data_return))
